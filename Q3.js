@@ -1,85 +1,65 @@
-const languages = [
-  {
-    title: '1970s',
-    languages: [
-      {
-        name: 'C',
-        year: 1972
-      }
-    ]
-  },
-  {
-    title: '1980s',
-    languages: [
-      {
-        name: 'C++',
-        year: 1983
-      },
-      {
-        name: 'Perl',
-        year: 1987
-      }
-    ]
-  },
-  {
-    title: '1990s',
-    languages: [
-      {
-        name: 'Haskell',
-        year: 1990
-      },
-      {
-        name: 'Python',
-        year: 1991
-      },
-      {
-        name: 'Java',
-        year: 1995
-      },
-      {
-        name: 'Javascript',
-        year: 1995
-      },
-      {
-        name: 'PHP',
-        year: 1995
-      },
-      {
-        name: 'Ruby',
-        year: 1995
-      }
-    ]
-  },
-  {
-    title: '2000s',
-    languages: [
-      {
-        name: 'C#',
-        year: 2000
-      },
-      {
-        name: 'Scala',
-        year: 2003
-      },
-      {
-        name: 'Clojure',
-        year: 2007
-      },
-      {
-        name: 'Go',
-        year: 2009
-      }
-    ]
-  },
-  {
-    title: '2010s',
-    languages: [
-      {
-        name: 'Elm',
-        year: 2012
-      }
-    ]
-  }
+
+const data = [
+ {
+   type: "User",
+   name: "Sam Smith"
+ },
+ {
+   type: "User",
+   name: "Rick Smith"
+ },
+ {
+   type: "User",
+   name: "Adam Jones"
+ },
+ {
+   type: "User",
+   name: "Amy Johnson"
+ },
+ {
+   type: "User",
+   name: "Sara Smith"
+ },
+ {
+   type: "User",
+   name: "April Johns"
+ },
+ {
+   type: "User",
+   name: "Samantha Adams"
+ },
+ {
+   type: "User",
+   name: "George Jetson"
+ },
+ {
+   type: "User",
+   name: "Frank Jordan"
+ },
+ {
+   type: "User",
+   name: "Charlie Adams"
+ },
+ {
+   type: "Group",
+   name: "Mrs. Smith's 1st Grade"
+ },
+ {
+   type: "Group",
+   name: "Mr. Jordan's 2nd Grade"
+ },
+ {
+   type: "Group",
+   name: "Mr. Adam's 7th Grade"
+ },
+ {
+   type: "Group",
+   name: "Mrs. John's 3rd Grade"
+ },
+ {
+   type: "Group",
+   name: "Mr. Smith's 9th Grade"
+ }
 ];
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
@@ -95,15 +75,14 @@ function getSuggestions(value) {
   }
 
   const regex = new RegExp('^' + escapedValue, 'i');
-  alert(section.name);
-  return languages
+  return data
     .map(section => {
       return {
-        title: section.title,
-        languages: section.languages.filter(language => regex.test(language.name))
+        type: section.type,
+        name: data.filter(info => regex.test(info.name))
       };
     })
-    .filter(section => section.languages.length > 0);
+    .filter(section => section.name.length > 0);
 }
 
 function getSuggestionValue(suggestion) {
@@ -118,12 +97,12 @@ function renderSuggestion(suggestion) {
 
 function renderSectionTitle(section) {
   return (
-    <strong>{section.title}</strong>
+    <strong>{section.type}</strong>
   );
 }
 
 function getSectionSuggestions(section) {
-  return section.languages;
+  return section.name;
 }
 
 class App extends React.Component {
