@@ -1,0 +1,73 @@
+# Question 1
+#
+# Sean Leeka
+# Software Engineering Coding Challenge
+# Austin, TX
+# 6 June 2017
+
+--> List of groups ‘User A’ has a member in:
+(I'm using "Richard Hendriks" as 'User A')
+
+SELECT name FROM groups WHERE id in (
+(SELECT group_id FROM memberships INNER JOIN users ON memberships.user_id=users.id WHERE users.fname='Richard' AND users.lname='Hendriks')
+
+
+# alternate answer (more explicit, perhaps slower)
+SELECT name FROM groups WHERE id in (
+	SELECT group_id FROM memberships WHERE user_id = (
+		SELECT id FROM users WHERE fname='Richard' and lname='Hendriks'
+		)
+	)
+
+
+--> Users with memberships in either GroupA or GroupB
+
+SELECT fname FROM users WHERE id IN (SELECT user_id FROM memberships INNER JOIN groups ON groups.id=memberships.id WHERE groups.name='GroupA' or groups.name='GroupB')
+
+
+# alternate answer (more explicit, perhaps slower)
+SELECT CONCAT(fname, ' ', lname) FROM users WHEREre id IN (SELECT user_id FROM memberships WHERE group_id in (SELECT id FROM groups WHERE name='one' OR name='two'))
+
+
+--> Users with memberships in both GroupA and GroupB
+
+SELECT fname FROM users WHERE id IN (SELECT user_id FROM memberships INNER JOIN groups ON groups.id=memberships.id WHERE groups.name='GroupA' AND groups.name='GroupB')
+
+
+# alternate answer (more explicit, perhaps slower)
+SELECT CONCAT(fname, ' ', lname) FROM users WHEREre id IN (SELECT user_id FROM memberships WHERE group_id in (SELECT id FROM groups WHERE name='GroupA' AND name='GroupB'))
+
+
+
+
+
+CREATE TABLE users (
+id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+fname VARCHAR(30) NOT NULL,
+lname VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE groups (
+id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE memberships (
+id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+user_id INT(6) NOT NULL,
+group_id INT(6) NOT NULL
+);
+
+insert into users (fname, lname) values ('bob','jones'),('bob2','jones'),('bob3','jones'),('bob4','jones');
+insert into groups (name) values ('one'),('two'),('three'),('four');
+insert into memberships (user_id, group_id) values (1,1),(2,1),(1,3),(3,4)
+
+
+#select * from users;
+#select * from groups;
+#select * from memberships;
+
+#select name from groups where users.id=memberships.user_id and users.fname='bob' and users.lname='jones' and memberships.group_id=groups.id
+#select name from groups where id in (select group_id from memberships where user_id=(select id from users where fname='bob' and lname='jones'))
+
+select CONCAT(fname, lname) from users where id in (select user_id from memberships where group_id in (select id from groups where name='one' or name='two'))
