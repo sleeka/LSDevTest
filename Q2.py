@@ -5,7 +5,7 @@
 # Austin, TX
 # 6 June 2017
 
-from json import loads
+from json import loads, dumps
 from random import shuffle
 from datetime import datetime
 
@@ -24,22 +24,22 @@ class Q2():
 		self.main_menu()
 
 	def print_history(self):
-		print("\n\t\t** HISTORY **")
+		print("\n\t\t** HISTORY **\n")
 		for timestamp in self.quiz_history.keys():
 			scores = self.quiz_history[timestamp]
 			score_percent = scores[0]/scores[1]*100
-			print(f"{scores[0]}/{scores[1]} \t ({score_percent}) \t\t {timestamp}")
+			print(f"{scores[0]}/{scores[1] :<8} ({score_percent}%) \t{timestamp:>15}")
 
 	def erase_history(self):
 		print("\t** Erasing history...")
 		with open('history.json','w') as f:
-			f.write({})
+			f.write('{}')
 
 	def save_history(self, results):
 		timestamp = datetime.now().strftime("%A, %d %B %Y %I:%M:%S%p")
 		self.quiz_history[timestamp] = results
 		with open('history.json','w') as f:
-			f.write(str(self.quiz_history))
+			f.write(dumps(self.quiz_history))
 
 	def main_menu(self):
 		while (True):
@@ -143,7 +143,6 @@ class quiz:
 					break
 
 			question_number += 1
-		print(self.wrong_answers)
 
 	def print_results(self):
 		score_percent = (self.score[0]/self.score[1])*100
@@ -156,7 +155,7 @@ class quiz:
 		question_number = 1
 		for q in self.q_shuffle:
 			if question_number in self.wrong_answers.keys():
-				print(f"{question_number}) {self.quiz_qa[q]['question']}")
+				print(f"\t{question_number}) {self.quiz_qa[q]['question']}")
 				option_number = 97
 				for option in self.options_shuffle[question_number-1]:
 					print(f"\t\t{chr(option_number)}) {self.quiz_qa[q]['options'][option]}")
@@ -164,7 +163,7 @@ class quiz:
 
 				answer_int = int(self.quiz_qa[q]['answer'])-1
 				answer_str = self.quiz_qa[q]['options'][answer_int]
-				selected_answer = self.quiz_qa[q]['options'][self.wrong_answers[question_number]]
+				selected_answer = self.quiz_qa[q]['options'][self.options_shuffle[question_number-1][self.wrong_answers[question_number]]]
 				print(f"Answer: {answer_str} \t\tYou selected: {selected_answer}\n")
 
 			question_number += 1
