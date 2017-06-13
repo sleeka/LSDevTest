@@ -1,4 +1,9 @@
-
+// Much credit: Moroshko
+// Q3) Global Search with results having headers driven from ajax
+// Sean Leeka
+// Software Engineering Coding Challenge
+// Austin, TX
+// 6 June 2017
 const data = [
  {
    type: "User",
